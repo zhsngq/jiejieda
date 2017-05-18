@@ -61,7 +61,9 @@
                         $(`#${i}`).find('small').html(`${fen}分${miao}秒`);
                     }
                 }
-                if (this.dataList[i].dataTime !==0 ) {
+                if (this.dataList[i].dataTime===0 && this.dataList[i].resDate===0) {
+                    $(`#${i}`).parent().find('i').css("color","");
+                } else if (this.dataList[i].dataTime !==0 ) {
                     $(`#${i}`).parent().find('i').css("color","");
                     $(`#${i}`).parent().find('i').eq(2).css("color","blueviolet");
                 } else if (this.dataList[i].resDate !==0){
@@ -139,12 +141,28 @@
             $.cookie('jiejieda',JSON.stringify(this.dataList));
         }
         Runtime.prototype.restCahe = function() {
-            var r=confirm("Press a button!");
-            if (r) {
+            if (confirm("确定清楚所有闹钟?")) {
                 $.cookie('jiejieda',0);
-                window.location.reload();
+                window.location.href=changeURLArg(window.location.href,'id',10000*Math.random());
             }
         }
+
+        function changeURLArg(url,arg,arg_val){ 
+            var pattern=arg+'=([^&]*)'; 
+            var replaceText=arg+'='+arg_val; 
+            if(url.match(pattern)){ 
+                var tmp='/('+ arg+'=)([^&]*)/gi'; 
+                tmp=url.replace(eval(tmp),replaceText); 
+                return tmp; 
+            }else{ 
+                if(url.match('[\?]')){ 
+                    return url+'&'+replaceText; 
+                }else{ 
+                    return url+'?'+replaceText; 
+                } 
+            } 
+            return url+'\n'+arg+'\n'+arg_val; 
+        } 
 
         var obj = new Runtime();
         obj.run();
