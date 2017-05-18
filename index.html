@@ -13,6 +13,9 @@
             float: right;
             padding-right: 8%;
         }
+        h1{
+                width: 50%;
+        }
     </style>
     <body>
        <div class="container-fluid">
@@ -23,8 +26,8 @@
                         </div>
                     </div> 
                     <div class="row-fluid" style="text-align: center;">
-                        <button class="btn btn-success btn-lg" style="width: 28%;" type="button" onclick="obj.addHtml()">添加一个闹钟</button>
-                        <button class="btn btn-danger btn-lg" style="width: 28%;" type="button" onclick="obj.restCahe()" >清理所有闹钟</button>
+                        <button class="btn btn-success btn-lg" style="width: 28%;" type="button" onclick="obj.addHtml()">添加</button>
+                        <button class="btn btn-danger btn-lg" style="width: 28%;" type="button" onclick="obj.restCahe()" >清理</button>
                     </div> 
                 </div>
             </div>
@@ -86,7 +89,8 @@
             $('#x_box').append(`
                 <div class="page-header">
                     <h1 id='${len}' style="display: inline-block;">
-                        ${len+1}: <small>#分#秒</small>
+                        <div class="glyphicon glyphicon-dashboard" style="margin-right: 8%;"></div>
+                        <small>#分#秒</small>
                     </h1>
                     <i style="font-size: 38px;" onclick="obj.refresh(this)" class="glyphicon glyphicon-refresh"></i>
                     <i style="font-size: 38px;" onclick="obj.pause(this)" class="glyphicon glyphicon-pause"></i>
