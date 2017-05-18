@@ -11,10 +11,12 @@
     <style>
         i{
             float: right;
-            padding-right: 8%;
+            /*padding-right: 8%;*/
+            position: relative;
+            top: -44px;
         }
         h1{
-                width: 36%;
+                width: 100%;
         }
     </style>
     <body>
@@ -89,12 +91,12 @@
             $('#x_box').append(`
                 <div class="page-header">
                     <h1 id='${len}' style="display: inline-block;">
-                        <div class="glyphicon glyphicon-dashboard" style="margin-right: 8%;"></div>
+                        <div class="glyphicon glyphicon-dashboard"></div>
                         <small>#分#秒</small>
                     </h1>
-                    <i style="font-size: 38px;" onclick="obj.refresh(this)" class="glyphicon glyphicon-refresh"></i>
-                    <i style="font-size: 38px;" onclick="obj.pause(this)" class="glyphicon glyphicon-pause"></i>
-                    <i style="font-size: 38px;" onclick="obj.play(this)" class="glyphicon glyphicon-play"></i>
+                    <i style="font-size: 38px;position: relative; top: -46px;" onclick="obj.refresh(this)" class="glyphicon glyphicon-refresh"></i>
+                    <i style="font-size: 38px;position: relative; top: -46px;" onclick="obj.pause(this)" class="glyphicon glyphicon-pause"></i>
+                    <i style="font-size: 38px;position: relative; top: -46px;" onclick="obj.play(this)" class="glyphicon glyphicon-play"></i>
                 </div>
             `);
         }
