@@ -34,7 +34,7 @@
 
         function Runtime() {
             this.dataList = [];
-            if ($.cookie('jiejieda')!=="0") {
+            if ($.cookie('jiejieda') && $.cookie('jiejieda')!=="0") {
                 this.dataList = $.parseJSON($.cookie('jiejieda'));
                 for(var i in this.dataList){
                     if (!this.dataList[i].resDate) {
