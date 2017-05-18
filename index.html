@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>姐姐哒计时器</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.bootcss.com/jquery/1.8.2/jquery.js"></script>
+        <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    </head>
+    <style>
+        i{
+            float: right;
+            padding-right: 8%;
+        }
+    </style>
+    <body>
+       <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="row-fluid">
+                        <div class="span12" id='x_box'>
+                        </div>
+                    </div> 
+                    <div class="row-fluid" style="text-align: center;">
+                        <button class="btn btn-success btn-lg" style="width: 28%;" type="button" onclick="obj.addHtml()">添加一个闹钟</button>
+                        <button class="btn btn-danger btn-lg" style="width: 28%;" type="button" onclick="obj.restCahe()" >清理所有闹钟</button>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </body>
+    <script>
+
+        function Runtime() {
+            this.dataList = [];
+            if ($.cookie('jiejieda')!=="0") {
+                this.dataList = $.parseJSON($.cookie('jiejieda'));
+                for(var i in this.dataList){
+                    if (!this.dataList[i].resDate) {
+                        this.dataList[i].resDate = 0;
+                    }
+                    this.addHtml(i);
+                }
+            }
+        } 
+
+        Runtime.prototype.run= function(){
+            for(var i in this.dataList){
+                i = parseInt(i);
+                if (this.dataList[i].dataTime !== 0) {
+                    var res = (new Date() - new Date(this.dataList[i].dataTime) + this.dataList[i].resDate) /1000;
+                    var fen = Math.floor(res/60);
+                    var miao = Math.floor(res%60);
+                    $(`#${i}`).find('small').html(`${fen}分${miao}秒`);
+                } else {
+                    if (this.dataList[i].resDate!==0) {
+                        var res = (this.dataList[i].resDate) /1000;
+                        var fen = Math.floor(res/60);
+                        var miao = Math.floor(res%60);
+                        $(`#${i}`).find('small').html(`${fen}分${miao}秒`);
+                    }
+                }
+                if (this.dataList[i].dataTime !==0 ) {
+                    $(`#${i}`).parent().find('i').css("color","");
+                    $(`#${i}`).parent().find('i').eq(2).css("color","blueviolet");
+                } else if (this.dataList[i].resDate !==0){
+                    $(`#${i}`).parent().find('i').css("color","");
+                    $(`#${i}`).parent().find('i').eq(1).css("color","blueviolet");
+                }
+            }
+            this.t = setTimeout(()=>{return this.run()}, 1000);
+        }
+
+        Runtime.prototype.addHtml = function (key) {
+            var len = 0;
+            if (!key) {
+                len = this.dataList.length;
+                this.dataInit(len);
+            } else {
+                len = key;
+            }
+            len = parseInt(len);
+            $('#x_box').append(`
+                <div class="page-header">
+                    <h1 id='${len}' style="display: inline-block;">
+                        ${len+1}: <small>#分#秒</small>
+                    </h1>
+                    <i style="font-size: 38px;" onclick="obj.refresh(this)" class="glyphicon glyphicon-refresh"></i>
+                    <i style="font-size: 38px;" onclick="obj.pause(this)" class="glyphicon glyphicon-pause"></i>
+                    <i style="font-size: 38px;" onclick="obj.play(this)" class="glyphicon glyphicon-play"></i>
+                </div>
+            `);
+        }
+        
+        /**
+         * 将数据初始化为初始状态
+         * @author zhsngq
+         * @param key int 
+         */
+        Runtime.prototype.dataInit = function (key) {
+            this.dataList[key] = {
+                'resDate':  0,
+                'dataTime': 0,
+            };
+        }
+
+        Runtime.prototype.play = function(_this) {
+            var key = $(_this).parent().find('h1').attr('id');
+            if (this.dataList[key].dataTime !== 0) {
+               return ; 
+            }
+            this.dataList[key].dataTime = new Date();
+            $(_this).css('color','blueviolet');
+            this.setCahe();
+        }
+
+        Runtime.prototype.pause = function(_this) {
+            var key = $(_this).parent().find('h1').attr('id');
+            key = parseInt(key);
+            if (this.dataList[key].dataTime === 0) {
+               return ; 
+            }
+            $(_this).css('color','blueviolet');
+            this.dataList[key].resDate += new Date() - new Date(this.dataList[key].dataTime);
+            this.dataList[key].dataTime = 0;
+            this.setCahe();
+        }
+
+        Runtime.prototype.refresh = function(_this) {
+            var key = $(_this).parent().find('h1').attr('id');
+            this.dataList[key].resDate = 0;
+            this.dataList[key].dataTime = 0;
+            $(_this).parent().find('small').html('#分#秒');
+            this.setCahe();
+        }
+
+        Runtime.prototype.setCahe = function(){
+            $.cookie('jiejieda',JSON.stringify(this.dataList));
+        }
+        Runtime.prototype.restCahe = function() {
+            var r=confirm("Press a button!");
+            if (r) {
+                $.cookie('jiejieda',0);
+                window.location.reload();
+            }
+        }
+
+        var obj = new Runtime();
+        obj.run();
+    </script>
+</html>
